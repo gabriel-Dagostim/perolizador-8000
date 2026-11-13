@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Perolizador 8000</title>
+<meta name="description" content="Perolizador 8000: dispositivo impresso em 3D que envasa 39 pérolas de gel em 3 camadas num pote de 5,5 cm.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#visualizador">Ir para o visualizador 3D</a>
+
+<header class="top">
+  <div class="wrap top-grid">
+    <div>
+      <p class="kicker">Impressão 3D · cosmética</p>
+      <h1>Perolizador 8000</h1>
+      <p class="tagline">Envasa <span class="hl">39 pérolas</span> de gel em 3 camadas num pote de 5,5 cm. Impressão 3D, sem suporte.</p>
+    </div>
+    <dl class="facts" aria-label="Resumo">
+      <div><dt>Bicos</dt><dd>13</dd></div>
+      <div><dt>Camadas</dt><dd>3</dd></div>
+      <div><dt>Pérola</dt><dd>~Ø8</dd></div>
+      <div><dt>Boca do pote</dt><dd>Ø55</dd></div>
+    </dl>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Seções">
+  <div class="wrap">
+    <ul class="nav-strip">
+      <li><a href="#como-funciona">Como funciona</a></li>
+      <li><a href="#animacao">Animação</a></li>
+      <li><a href="#pecas">Peças</a></li>
+      <li><a href="#baixar">Baixar</a></li>
+      <li><a href="#imprimir">Imprimir</a></li>
+      <li><a href="#usar">Usar</a></li>
+      <li><a href="#video">Vídeo</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- 2. Visualizador 3D -->
+<section class="viewer-sec" id="visualizador" aria-labelledby="t-visualizador">
+  <div class="wrap">
+    <div class="viewer-head">
+      <h2 id="t-visualizador" class="h-display">Visualizador 3D</h2>
+      <p class="hint">Arraste para girar, role ou pince para aproximar. Os modelos são os mesmos arquivos STL que você imprime; pote e seringa são ilustrativos.</p>
+    </div>
+
+    <div class="tools" role="group" aria-label="Controles do visualizador">
+      <div class="grp grp-range">
+        <span class="lbl" id="l-explodir">Explodir</span>
+        <div class="rng">
+          <input type="range" id="explodir" min="0" max="100" step="1" value="0" aria-labelledby="l-explodir" aria-valuetext="0%">
+          <output id="explodir-out" for="explodir">0%</output>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="lbl" id="l-adapt">Adaptador</span>
+        <div class="seg" role="radiogroup" aria-labelledby="l-adapt">
+          <input type="radio" name="adapt" id="adapt-luer" value="luer" checked><label for="adapt-luer">Luer</label>
+          <input type="radio" name="adapt" id="adapt-cateter" value="cateter"><label for="adapt-cateter">Cateter</label>
+          <input type="radio" name="adapt" id="adapt-grosso" value="grosso"><label for="adapt-grosso">Grosso</label>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="lbl" id="l-camada">Camada</span>
+        <div class="seg" role="radiogroup" aria-labelledby="l-camada">
+          <input type="radio" name="camada" id="camada-1" value="1" checked><label for="camada-1">1</label>
+          <input type="radio" name="camada" id="camada-2" value="2"><label for="camada-2">2</label>
+          <input type="radio" name="camada" id="camada-3" value="3"><label for="camada-3">3</label>
+        </div>
+      </div>
+
+      <div class="grp grp-toggles">
+        <span class="lbl" id="l-vista">Vista</span>
+        <div class="tgls" role="group" aria-labelledby="l-vista">
+          <span class="tgl"><input type="checkbox" id="corte"><label for="corte">Corte</label></span>
+          <span class="tgl"><input type="checkbox" id="girar"><label for="girar">Girar</label></span>
+          <span class="tgl"><input type="checkbox" id="rotulos" checked><label for="rotulos">Rótulos</label></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage1" data-viewer="1">
+      <canvas role="img" aria-label="Modelo 3D do Perolizador 8000 montado sobre o pote, com adaptador Luer"></canvas>
+      <div class="hs-layer" id="hs-layer">
+        <div class="hs l" data-hs="cabecote"><i class="dot"></i><span class="txt">Cabeçote</span></div>
+        <div class="hs r" data-hs="adaptador"><i class="dot"></i><span class="txt">Adaptador</span></div>
+        <div class="hs l" data-hs="bicos"><i class="dot"></i><span class="txt">Bicos</span></div>
+        <div class="hs r" data-hs="anel"><i class="dot"></i><span class="txt">Anel</span></div>
+        <div class="hs r" data-hs="pote"><i class="dot"></i><span class="txt">Pote</span></div>
+      </div>
+      <div class="ov" data-ov="loading" role="status"><span class="spin" aria-hidden="true"></span><span class="ov-t">Carregando modelos 3D…</span></div>
+      <div class="ov err" data-ov="error" role="alert" hidden>
+        <p class="ov-t"></p>
+        <img src="img/cabecote.png" alt="Render do cabeçote (imagem de reserva)" width="1200" height="900">
+      </div>
+      <noscript><p class="ov-t ns">O visualizador 3D precisa de JavaScript.</p></noscript>
+    </div>
+    <p class="legend" id="legenda-v1" aria-live="polite">Camada 1 · cabeçote assentado direto na boca do pote.</p>
+  </div>
+</section>
+
+<!-- 3. Como funciona -->
+<section class="sec" id="como-funciona" aria-labelledby="t-como">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">01</span><h2 id="t-como" class="h-display">Como funciona</h2></header>
+    <div class="sec-body">
+      <p class="lead">O pote já vem com uma base de gel transparente. O cabeçote preto assenta na boca do pote e os 13 bicos ficam mergulhados no gel.</p>
+      <p>Uma seringa empurra o gel ativo colorido (por exemplo, retinol) por um adaptador até uma câmara interna. Da câmara saem 13 canais em gota, um para cada bico. Cada empurrão deixa uma gota de cerca de 8 mm na ponta de cada bico, já dentro do gel base, onde ela fica suspensa como uma pérola.</p>
+      <p>Os bicos são 4 no centro, num círculo de Ø14, e 9 em volta, num círculo de Ø33. Para fazer a camada 2 e a camada 3, anéis reguladores de 8 mm sobem o cabeçote. São <span class="hl">3 camadas × 13 = 39 pérolas</span>.</p>
+
+      <figure class="flow" aria-labelledby="flow-cap">
+        <svg class="flow-h" viewBox="0 0 960 150" role="img" aria-label="Fluxo: seringa, adaptador, câmara, 13 canais, 13 bicos, pérolas no gel">
+          <defs><marker id="seta-h" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" class="seta-fill"/></marker></defs>
+          <g class="nodes">
+            <rect x="0" y="40" width="130" height="70" rx="6"/><text x="65" y="70" class="n1">Seringa</text><text x="65" y="92" class="n2">1 a 100 ml</text>
+            <rect x="166" y="40" width="130" height="70" rx="6"/><text x="231" y="70" class="n1">Adaptador</text><text x="231" y="92" class="n2">3 modelos</text>
+            <rect x="332" y="40" width="130" height="70" rx="6"/><text x="397" y="70" class="n1">Câmara</text><text x="397" y="92" class="n2">interna</text>
+            <rect x="498" y="40" width="130" height="70" rx="6"/><text x="563" y="70" class="n1">13 canais</text><text x="563" y="92" class="n2">em gota Ø3,5</text>
+            <rect x="664" y="40" width="130" height="70" rx="6"/><text x="729" y="70" class="n1">13 bicos</text><text x="729" y="92" class="n2">furo Ø1,8</text>
+            <rect x="830" y="40" width="130" height="70" rx="6" class="last"/><text x="895" y="70" class="n1 last-t">Pérolas</text><text x="895" y="92" class="n2 last-t">no gel base</text>
+          </g>
+          <g class="arrows" marker-end="url(#seta-h)">
+            <line x1="132" y1="75" x2="164" y2="75" marker-end="url(#seta-h)"/><line x1="298" y1="75" x2="330" y2="75" marker-end="url(#seta-h)"/>
+            <line x1="464" y1="75" x2="496" y2="75" marker-end="url(#seta-h)"/><line x1="630" y1="75" x2="662" y2="75" marker-end="url(#seta-h)"/>
+            <line x1="796" y1="75" x2="828" y2="75" marker-end="url(#seta-h)"/>
+          </g>
+        </svg>
+        <svg class="flow-v" viewBox="0 0 300 500" aria-hidden="true" focusable="false">
+          <defs><marker id="seta-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" class="seta-fill"/></marker></defs>
+          <g class="nodes">
+            <rect x="20" y="0" width="260" height="58" rx="6"/><text x="150" y="26" class="n1">Seringa</text><text x="150" y="46" class="n2">1 a 100 ml</text>
+            <rect x="20" y="88" width="260" height="58" rx="6"/><text x="150" y="114" class="n1">Adaptador</text><text x="150" y="134" class="n2">Luer, Cateter ou Grosso</text>
+            <rect x="20" y="176" width="260" height="58" rx="6"/><text x="150" y="202" class="n1">Câmara</text><text x="150" y="222" class="n2">interna do cabeçote</text>
+            <rect x="20" y="264" width="260" height="58" rx="6"/><text x="150" y="290" class="n1">13 canais</text><text x="150" y="310" class="n2">em gota, Ø3,5</text>
+            <rect x="20" y="352" width="260" height="58" rx="6"/><text x="150" y="378" class="n1">13 bicos</text><text x="150" y="398" class="n2">furo interno Ø1,8</text>
+            <rect x="20" y="440" width="260" height="58" rx="6" class="last"/><text x="150" y="466" class="n1 last-t">Pérolas</text><text x="150" y="486" class="n2 last-t">suspensas no gel base</text>
+          </g>
+          <g class="arrows">
+            <line x1="150" y1="60" x2="150" y2="86" marker-end="url(#seta-v)"/><line x1="150" y1="148" x2="150" y2="174" marker-end="url(#seta-v)"/>
+            <line x1="150" y1="236" x2="150" y2="262" marker-end="url(#seta-v)"/><line x1="150" y1="324" x2="150" y2="350" marker-end="url(#seta-v)"/>
+            <line x1="150" y1="412" x2="150" y2="438" marker-end="url(#seta-v)"/>
+          </g>
+        </svg>
+        <figcaption id="flow-cap">Caminho do gel ativo, da seringa até as pérolas.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <img src="img/corte.png" width="1200" height="900" loading="lazy" alt="Render em corte do cabeçote mostrando a câmara interna e os canais em gota">
+        <figcaption>Corte do cabeçote (render do OpenSCAD): câmara interna e canais em gota.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Animação -->
+<section class="viewer-sec alt" id="animacao" aria-labelledby="t-anim">
+  <div class="wrap">
+    <div class="viewer-head">
+      <h2 id="t-anim" class="h-display">Animação: como usar</h2>
+      <p class="hint">Passo a passo em cerca de 47 segundos. Arraste a linha do tempo para ir e voltar, ou toque num capítulo.</p>
+    </div>
+
+    <div class="stage" id="stage2" data-viewer="2">
+      <canvas role="img" aria-label="Animação 3D do processo de envase, passo a passo"></canvas>
+      <div class="cap-over" aria-hidden="true"><span id="contagem">Pérolas 0 / 39</span></div>
+      <div class="ov" data-ov="loading" role="status"><span class="spin" aria-hidden="true"></span><span class="ov-t">Carregando animação…</span></div>
+      <div class="ov err" data-ov="error" role="alert" hidden>
+        <p class="ov-t"></p>
+        <img src="img/corte.png" alt="Render em corte (imagem de reserva)" width="1200" height="900">
+      </div>
+      <noscript><p class="ov-t ns">A animação precisa de JavaScript.</p></noscript>
+    </div>
+
+    <p class="caption" id="legenda" aria-live="polite"><span class="cap-k" id="cap-cap">A</span><span id="cap-txt">Pote vazio na bancada, boca de Ø55 mm.</span></p>
+
+    <div class="pbar">
+      <button type="button" class="btn btn-play" id="play" aria-label="Reproduzir animação">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path class="ic-play" d="M7 4.5v15l12-7.5z"/><path class="ic-pause" d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/></svg>
+        <span id="play-t">Reproduzir</span>
+      </button>
+      <div class="tl">
+        <label for="tempo" class="sr">Linha do tempo</label>
+        <input type="range" id="tempo" min="0" max="47.5" step="0.05" value="0" aria-valuetext="0:00 de 0:47">
+        <output id="tempo-out" for="tempo">0:00 / 0:47</output>
+      </div>
+      <span class="tgl tgl-cam"><input type="checkbox" id="camauto" checked><label for="camauto">Câmera automática</label></span>
+    </div>
+
+    <ol class="chaps" id="chaps" aria-label="Capítulos">
+      <li><button type="button" class="chap" data-t="0"><b>A</b>Pote e gel base</button></li>
+      <li><button type="button" class="chap" data-t="4.5"><b>B</b>Adaptador</button></li>
+      <li><button type="button" class="chap" data-t="9"><b>C</b>Cabeçote</button></li>
+      <li><button type="button" class="chap" data-t="12.5"><b>D</b>Seringa</button></li>
+      <li><button type="button" class="chap" data-t="16"><b>E</b>Camada 1</button></li>
+      <li><button type="button" class="chap" data-t="20.5"><b>F</b>Camada 2</button></li>
+      <li><button type="button" class="chap" data-t="28.5"><b>G</b>Camada 3</button></li>
+      <li><button type="button" class="chap" data-t="36.5"><b>H</b>Tampa</button></li>
+    </ol>
+    <p style="margin-top:14px"><a class="btn btn-sm" href="video/Perolizador8000_como_usar.mp4" download>Baixar vídeo (MP4)</a></p>
+  </div>
+</section>
+
+<!-- 5. Peças -->
+<section class="sec" id="pecas" aria-labelledby="t-pecas">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">02</span><h2 id="t-pecas" class="h-display">Peças</h2></header>
+    <div class="sec-body wide">
+      <div class="cards">
+        <article class="card c-head">
+          <header><h3>Cabeçote</h3><p class="qty"><b>1</b> peça</p></header>
+          <p>Corpo preto que assenta na boca do pote. Guarda a câmara interna, os 13 canais em gota e os 13 furos onde os bicos são colados. Imprime com a face de cima para baixo, sem suporte.</p>
+          <p class="dim"><span>Medida-chave</span> Ø62 × 28 mm · encaixe no pote Ø55,6 × 4</p>
+          <img src="img/cabecote.png" width="1200" height="900" loading="lazy" alt="Render do cabeçote com os furos dos bicos">
+        </article>
+
+        <article class="card">
+          <header><h3>Bicos</h3><p class="qty"><b>13</b> + 2 reservas</p></header>
+          <p>Espiga macho colada em cada furo do cabeçote. Quatro ficam no centro, num círculo de Ø14, e nove em volta, num círculo de Ø33. Cada um solta uma gota por empurrão.</p>
+          <p class="dim"><span>Medida-chave</span> furo interno Ø1,8 · comprimento útil 29 mm</p>
+        </article>
+
+        <article class="card">
+          <header><h3>Reguladores de altura</h3><p class="qty"><b>2</b> anéis</p></header>
+          <p>Empilhados na boca do pote, levantam o cabeçote para a camada 2 e a camada 3. Um anel para cada camada extra.</p>
+          <p class="dim"><span>Medida-chave</span> sobe 8 mm cada · Ø62 · espiga Ø55,1 × 3,5</p>
+          <img src="img/aneis.png" width="1200" height="900" loading="lazy" alt="Render dos dois anéis reguladores de altura">
+        </article>
+
+        <article class="card c-adapt">
+          <header><h3>Adaptadores</h3><p class="qty"><b>3</b> modelos</p></header>
+          <p>Encaixam no cone do cabeçote (cone 1:5, boca Ø14, 12 de profundidade) com folga nominal de 1,5 mm entre a flange e o cabeçote. Escolha pelo bico da sua seringa.</p>
+          <div class="tbl-wrap small" tabindex="0" role="region" aria-label="Qual adaptador usar">
+            <table class="t-adapt">
+              <caption class="sr">Sua seringa e o adaptador indicado</caption>
+              <thead><tr><th scope="col">Sua seringa</th><th scope="col">Use o adaptador</th></tr></thead>
+              <tbody>
+                <tr><td>Luer slip ou Luer lock, de 1 a 60 ml (o Luer lock encaixa sem rosquear)</td><th scope="row">Luer</th></tr>
+                <tr><td>Seringa grande, de 50 a 100 ml, com bico de cateter Ø5 a 9 mm</td><th scope="row">Cateter</th></tr>
+                <tr><td>Seringa ou bisnaga com bico grosso, Ø9 a 14 mm</td><th scope="row">Grosso</th></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="dim"><span>Medida-chave</span> Luer ISO 80369-7 (6%) · Cateter Ø5 a 9 · Grosso Ø9 a 14</p>
+          <img src="img/adaptadores.png" width="1200" height="900" loading="lazy" alt="Render dos três adaptadores: Luer, Cateter e Grosso">
+        </article>
+
+        <article class="card c-test">
+          <header><h3>Peça de teste</h3><p class="qty"><b>1</b> peça · imprima primeiro</p></header>
+          <p>Um anel de 3 mm para provar no pote, mais um bloco com o encaixe do adaptador e um furo de cola, mais um pino de teste Ø4. Evita imprimir tudo e descobrir que apertou.</p>
+          <p class="dim"><span>Medida-chave</span> pino Ø4 · furo de cola Ø4,25 · anel de 3 mm</p>
+          <img src="img/teste.png" width="1200" height="900" loading="lazy" alt="Render da peça de teste de encaixes">
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Baixar -->
+<section class="sec tint" id="baixar" aria-labelledby="t-baixar">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">03</span><h2 id="t-baixar" class="h-display">Baixar arquivos</h2></header>
+    <div class="sec-body wide">
+      <div class="dl-top">
+        <a class="btn btn-primary btn-big" href="arquivos/Perolizador8000_completo.zip" download>Baixar tudo (.zip) <span class="mono">318,5 KB</span></a>
+        <p>Tem todos os STL e o .scad. Prefere pegar só o que precisa? A tabela abaixo lista cada arquivo. Imprima a peça de teste primeiro.</p>
+      </div>
+
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="Tabela de arquivos (rola para o lado)">
+        <table class="t-files">
+          <caption class="sr">Arquivos para baixar e como imprimir cada um</caption>
+          <thead>
+            <tr><th scope="col">Arquivo</th><th scope="col">O que é</th><th scope="col">Imprimir</th><th scope="col">Orientação na mesa</th><th scope="col">Suporte</th><th scope="col">Brim</th><th scope="col">Tamanho</th></tr>
+          </thead>
+          <tbody>
+            <tr class="first">
+              <th scope="row"><span class="fn">P8000_teste_encaixes.stl</span><a class="btn btn-sm" href="arquivos/P8000_teste_encaixes.stl" download>Baixar</a></th>
+              <td>Peça de teste: anel de 3 mm para provar no pote, bloco com encaixe do adaptador e um furo de cola, e pino de teste Ø4. <b class="hl">Imprima primeiro.</b></td>
+              <td class="mono">1</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">78,6 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_cabecote.stl</span><a class="btn btn-sm" href="arquivos/P8000_cabecote.stl" download>Baixar</a></th>
+              <td>Cabeçote com câmara, canais e furos dos bicos.</td>
+              <td class="mono">1</td><td>Face de cima para baixo</td><td>Não</td><td>Não</td><td class="mono">389,1 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_bicos_x15.stl</span><a class="btn btn-sm" href="arquivos/P8000_bicos_x15.stl" download>Baixar</a></th>
+              <td>15 bicos: os 13 do cabeçote mais 2 reservas.</td>
+              <td class="mono">1 placa (15)</td><td>Espiga para baixo</td><td>Não</td><td>Sim</td><td class="mono">422,0 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_aneis_x2.stl</span><a class="btn btn-sm" href="arquivos/P8000_aneis_x2.stl" download>Baixar</a></th>
+              <td>Os 2 reguladores de altura (8 mm cada).</td>
+              <td class="mono">1 placa (2)</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">112,6 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_adaptadores_x3.stl</span><a class="btn btn-sm" href="arquivos/P8000_adaptadores_x3.stl" download>Baixar</a></th>
+              <td>Os 3 adaptadores (Luer, Cateter, Grosso) numa placa só.</td>
+              <td class="mono">1 placa (3)</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">175,1 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_adaptador_luer.stl</span><a class="btn btn-sm" href="arquivos/P8000_adaptador_luer.stl" download>Baixar</a></th>
+              <td>Só o adaptador Luer (seringas de 1 a 60 ml).</td>
+              <td class="mono">1</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">62,6 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_adaptador_cateter.stl</span><a class="btn btn-sm" href="arquivos/P8000_adaptador_cateter.stl" download>Baixar</a></th>
+              <td>Só o adaptador Cateter (seringas de 50 a 100 ml).</td>
+              <td class="mono">1</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">62,6 KB</td>
+            </tr>
+            <tr>
+              <th scope="row"><span class="fn">P8000_adaptador_grosso.stl</span><a class="btn btn-sm" href="arquivos/P8000_adaptador_grosso.stl" download>Baixar</a></th>
+              <td>Só o adaptador Grosso (bico de Ø9 a 14).</td>
+              <td class="mono">1</td><td>Como está no arquivo</td><td>Não</td><td>Não</td><td class="mono">50,1 KB</td>
+            </tr>
+            <tr class="src">
+              <th scope="row"><span class="fn">Perolizador8000_como_usar.mp4</span><a class="btn btn-sm" href="video/Perolizador8000_como_usar.mp4" download>Baixar</a></th>
+              <td>Vídeo da animação &ldquo;Como usar&rdquo; (1920×1080, 52 s, horizontal).</td>
+              <td class="mono">não imprime</td><td>Não se aplica</td><td>Não se aplica</td><td>Não se aplica</td><td class="mono">11,4 MB</td>
+            </tr>
+            <tr class="src">
+              <th scope="row"><span class="fn">Perolizador8000_como_usar_vertical.mp4</span><a class="btn btn-sm" href="video/Perolizador8000_como_usar_vertical.mp4" download>Baixar</a></th>
+              <td>O mesmo vídeo em formato vertical (1080×1920), para WhatsApp e stories.</td>
+              <td class="mono">não imprime</td><td>Não se aplica</td><td>Não se aplica</td><td>Não se aplica</td><td class="mono">11,4 MB</td>
+            </tr>
+            <tr class="src">
+              <th scope="row"><span class="fn">perolizador8000.scad</span><a class="btn btn-sm" href="arquivos/perolizador8000.scad" download>Baixar</a></th>
+              <td>Fonte paramétrica do OpenSCAD, para editar folgas e medidas.</td>
+              <td class="mono">não imprime</td><td>Não se aplica</td><td>Não se aplica</td><td>Não se aplica</td><td class="mono">18,6 KB</td>
+            </tr>
+            <tr class="src">
+              <th scope="row"><span class="fn">Perolizador8000_completo.zip</span><a class="btn btn-sm" href="arquivos/Perolizador8000_completo.zip" download>Baixar</a></th>
+              <td>Pacote com tudo acima.</td>
+              <td class="mono">não imprime</td><td>Não se aplica</td><td>Não se aplica</td><td>Não se aplica</td><td class="mono">318,5 KB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Tamanhos em KB (1 KB = 1024 bytes). Arquivos individuais de adaptador e a placa x3 trazem as mesmas peças: baixe só o que for usar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Como imprimir -->
+<section class="sec" id="imprimir" aria-labelledby="t-imprimir">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">04</span><h2 id="t-imprimir" class="h-display">Como imprimir</h2></header>
+    <div class="sec-body">
+      <ol class="steps">
+        <li>
+          <h3>Imprima a peça de teste e confira</h3>
+          <p>Use <span class="mono">P8000_teste_encaixes.stl</span> antes de qualquer outra. Confira três coisas:</p>
+          <ul class="checks">
+            <li>O anel entra no pote sem forçar e sem folga visível.</li>
+            <li>O pino Ø4 entra no furo com leve folga, o espaço da cola.</li>
+            <li>O adaptador entra no cone e para com cerca de 1,5 mm de folga sob a flange.</li>
+          </ul>
+        </li>
+        <li>
+          <h3>Se algo apertar, ajuste e reimprima o teste</h3>
+          <p>No fatiador, mude a "compensação de furos / XY" em 0,1 mm. Ou, no <span class="mono">perolizador8000.scad</span>, mexa nos parâmetros <span class="mono">folga</span>, <span class="mono">folga_cola</span> e <span class="mono">folga_cone</span>. Só avance quando o teste fechar.</p>
+        </li>
+        <li>
+          <h3>Configurações do fatiador</h3>
+          <dl class="spec-list">
+            <div><dt>Material</dt><dd>PETG (PLA serve para testes)</dd></div>
+            <div><dt>Bico</dt><dd class="mono">0,4 mm</dd></div>
+            <div><dt>Altura de camada</dt><dd class="mono">0,2 mm</dd></div>
+            <div><dt>Bicos e adaptadores</dt><dd class="mono">0,12 a 0,16 mm</dd></div>
+            <div><dt>Perímetros</dt><dd class="mono">4</dd></div>
+            <div><dt>Camadas topo/base</dt><dd class="mono">3</dd></div>
+            <div><dt>Preenchimento</dt><dd class="mono">25% giroide</dd></div>
+            <div><dt>Suporte</dt><dd>Nenhum</dd></div>
+            <div><dt>Brim</dt><dd>Nos bicos</dd></div>
+            <div><dt>Parede externa</dt><dd class="mono">&le; 40 mm/s</dd></div>
+            <div><dt>Ironing</dt><dd>Desligado</dd></div>
+          </dl>
+          <p class="note">Tempo de impressão e gasto de filamento: veja no seu fatiador.</p>
+        </li>
+        <li>
+          <h3>Orientação de cada peça</h3>
+          <ul class="orient">
+            <li><b>Cabeçote:</b> face de cima para baixo, sem suporte.</li>
+            <li><b>Bicos:</b> espiga para baixo, com brim. Imprima os 15 (13 mais 2 reservas).</li>
+            <li><b>Anéis, adaptadores e peça de teste:</b> como estão nos arquivos, já posicionados para imprimir sem suporte.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Montagem e anti-entupimento -->
+<section class="sec tint" id="montagem" aria-labelledby="t-montagem">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">05</span><h2 id="t-montagem" class="h-display">Montagem e anti-entupimento</h2></header>
+    <div class="sec-body">
+      <p class="lead">Os furos de Ø1,8 são a menor passagem do fluxo. Se um entope, aquele bico deixa de pingar e a camada fica falha.</p>
+      <div class="groups">
+        <section>
+          <h3>Antes de colar</h3>
+          <ul class="checks">
+            <li>Limpe cada furo com uma broca Ø1,8 girada à mão, ou com agulha ou arame de Ø1,5.</li>
+            <li>Sopre ou passe água pelo cabeçote para tirar resíduo de impressão.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Colando os bicos</h3>
+          <ul class="checks">
+            <li>Use epóxi e espere 24 h de cura.</li>
+            <li>Pouca cola, só na espiga.</li>
+            <li>Deixe um arame de Ø1,5 dentro do furo enquanto cura, para a cola não entupir.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Teste com água</h3>
+          <ul class="checks">
+            <li>Confira se os 13 bicos pingam igual.</li>
+            <li>Um que pinga menos ainda tem resíduo: limpe de novo.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Durante o uso</h3>
+          <ul class="checks">
+            <li>Filtre o gel ativo: sem grumos nem partículas maiores que 1 mm.</li>
+            <li>Purgue a primeira gota de cada bico num copo antes de ir ao pote.</li>
+            <li>Empurre o êmbolo devagar e constante, para as gotas saírem iguais.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Depois do uso</h3>
+          <ul class="checks">
+            <li>Não deixe o gel secar no cabeçote.</li>
+            <li>Lave logo, passando água morna pela seringa.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Como usar -->
+<section class="sec" id="usar" aria-labelledby="t-usar">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">06</span><h2 id="t-usar" class="h-display">Como usar</h2></header>
+    <div class="sec-body">
+      <p class="lead">Os passos seguem a animação, na mesma ordem.</p>
+      <ol class="steps use">
+        <li><h3>Pote e gel base</h3><p>Com o pote vazio na bancada, encha com o gel base transparente até 3 mm abaixo da rosca.</p></li>
+        <li><h3>Adaptador no cabeçote</h3><p>Escolha o adaptador pela sua seringa (Luer, Cateter ou Grosso) e encaixe no cone do cabeçote, descendo e girando ¼ de volta.</p></li>
+        <li><h3>Cabeçote no pote</h3><p>Assente o cabeçote na boca do pote. Os 13 bicos entram no gel. Se ainda não purgou, faça antes: encha a seringa com o gel ativo filtrado e solte a primeira gota de cada bico num copo.</p></li>
+        <li><h3>Seringa no adaptador</h3><p>Com o gel ativo na seringa, encaixe a seringa no adaptador. Luer lock não precisa rosquear.</p></li>
+        <li><h3>Camada 1</h3><p>Empurre o êmbolo um pouco, devagar e constante. Cresce uma gota em cada um dos 13 bicos e ela fica suspensa no gel.</p></li>
+        <li><h3>Camada 2</h3><p>Tire a seringa e levante o cabeçote. Assente o anel 1 na boca do pote, volte o cabeçote (8 mm mais alto), encaixe a seringa e empurre o êmbolo.</p></li>
+        <li><h3>Camada 3</h3><p>Repita com o anel 2, empilhado sobre o primeiro. Agora são 39 pérolas.</p></li>
+        <li><h3>Tampar e lavar</h3><p>Retire seringa, cabeçote e anéis. Rosqueie a tampa. Lave tudo logo, com água morna passando pela seringa e pelos bicos.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Medidas -->
+<section class="sec tint" id="medidas" aria-labelledby="t-medidas">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">07</span><h2 id="t-medidas" class="h-display">Medidas</h2></header>
+    <div class="sec-body wide">
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="Tabela de medidas">
+        <table class="t-spec">
+          <caption class="sr">Medidas reais, em milímetros</caption>
+          <thead><tr><th scope="col">Peça</th><th scope="col">Medida</th><th scope="col" class="num-col">Valor (mm)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" rowspan="2">Cabeçote</th><td>Diâmetro × altura</td><td class="v">Ø62 × 28</td></tr>
+            <tr><td>Encaixe no pote (folga 0,6)</td><td class="v">Ø55,6 × 4</td></tr>
+            <tr><th scope="row" rowspan="6">Bicos (13 + 2 reservas)</th><td>Espiga macho</td><td class="v">Ø4 × 5</td></tr>
+            <tr><td>Furo de colagem no cabeçote</td><td class="v">Ø4,25 × 5,5</td></tr>
+            <tr><td>Furo interno</td><td class="v">Ø1,8</td></tr>
+            <tr><td>Ponta</td><td class="v">Ø3,6</td></tr>
+            <tr><td>Comprimento útil</td><td class="v">29</td></tr>
+            <tr><td>Posição: 4 no centro, 9 em volta</td><td class="v">círculos Ø14 e Ø33</td></tr>
+            <tr><th scope="row" rowspan="2">Fluxo interno</th><td>Canais em gota</td><td class="v">Ø3,5</td></tr>
+            <tr><td>Menor passagem do fluxo</td><td class="v">Ø1,8</td></tr>
+            <tr><th scope="row" rowspan="4">Encaixe do adaptador</th><td>Cone</td><td class="v">1:5</td></tr>
+            <tr><td>Boca</td><td class="v">Ø14</td></tr>
+            <tr><td>Profundidade</td><td class="v">12</td></tr>
+            <tr><td>Folga nominal entre flange e cabeçote</td><td class="v">1,5</td></tr>
+            <tr><th scope="row" rowspan="3">Anéis reguladores (2)</th><td>Diâmetro</td><td class="v">Ø62</td></tr>
+            <tr><td>Altura que cada um sobe</td><td class="v">8</td></tr>
+            <tr><td>Espiga</td><td class="v">Ø55,1 × 3,5</td></tr>
+            <tr><th scope="row" rowspan="3">Pote usado</th><td>Rosca (pescoço)</td><td class="v">Ø55 × 15</td></tr>
+            <tr><td>Profundidade interna do corpo</td><td class="v">20 (35 da borda ao fundo)</td></tr>
+            <tr><td>Ponta dos bicos acima do fundo, camada 1</td><td class="v">6</td></tr>
+            <tr><th scope="row" rowspan="3">Pérolas</th><td>Tamanho</td><td class="v">~Ø8</td></tr>
+            <tr><td>Por camada</td><td class="v">13</td></tr>
+            <tr><td>Total em 3 camadas</td><td class="v">39</td></tr>
+            <tr><th scope="row" rowspan="3">Adaptadores</th><td>Luer: seringas de 1 a 60 ml, ISO 80369-7 (6%)</td><td class="v">Luer slip ou lock</td></tr>
+            <tr><td>Cateter: seringas grandes de 50 a 100 ml</td><td class="v">bico Ø5 a 9</td></tr>
+            <tr><td>Grosso: seringas e bisnagas de bico grosso</td><td class="v">bico Ø9 a 14</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Vídeo -->
+<section class="sec" id="video" aria-labelledby="t-video">
+  <div class="wrap sec-grid">
+    <header class="sec-head"><span class="num">08</span><h2 id="t-video" class="h-display">Vídeo de referência</h2></header>
+    <div class="sec-body">
+      <figure class="vid">
+        <div class="vframe">
+          <video controls playsinline preload="metadata" aria-label="Vídeo de referência do processo original">
+            <source src="video/referencia.mp4" type="video/mp4">
+            Seu navegador não toca este vídeo. <a href="video/referencia.mp4" download>Baixar o vídeo</a>.
+          </video>
+        </div>
+        <figcaption>Vídeo de referência do processo original (Instagram). Créditos ao autor original; o Perolizador 8000 é uma versão própria para impressão 3D.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-row">
+    <p>Perolizador 8000 · arquivos para uso pessoal</p>
+    <p class="mono"><time datetime="2026-11-12">12/11/2026</time></p>
+  </div>
+</footer>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="vendor/STLLoader.js"></script>
+<script src="vendor/RoomEnvironment.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
